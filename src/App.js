@@ -2,12 +2,15 @@ import './styles/App.scss';
 import { db } from './firebase';
 import React, { Fragment, useState } from 'react';
 
-function App() {
+class App extends React.Component() {
 
-  const [inventarioVar, setInventario] = useState({inventario: {ID: "", ID_categoria: "", ID_marca: "", calificacion: "", cant_ventas: "", cantidad: "", descripcion: "", imagen: "", nombre: "", precio: ""}});  
+  state = {
+    inventario: null
+  }
 
-  const Firedb = date => {
-    console.log(date)
+  Firedb () {
+
+    console.log("entro a Firedb")
   
     let ID = [];
     let ID_categoria = [];
@@ -19,8 +22,6 @@ function App() {
     let imagen = [];
     let nombre = [];
     let precio = [];
-
-    console.log(date)
   
     db.collection('inventario')
       .get()
@@ -53,36 +54,49 @@ function App() {
               precio : precio[i]
             }
 
-            if(ID[i] == date){
-                console.log("Seteo la info", temp)
-                setInventario(temp)
-            }
+            this.setState({ inventario: temp})
+            console.log("aqui llego")
         }
+        
       });
   }
 
-  return (
-    <div className="App">
-      <div className="MainContent">
-            {
-              inventarioVar.map((object, index = 0) => (
-                <div className="postInfo">
-                  <div>{object.ID}</div>
-                  <div>{object.ID_categoria}</div>
-                  <div>{object.ID_marca}</div>
-                  <div>{object.calificacion}</div>
-                  <div>{object.cant_ventas}</div>
-                  <div>{object.cantidad}</div>
-                  <div>{object.descripcion}</div>
-                  <div>{object.imagen}</div>
-                  <div>{object.nombre}</div>
-                  <div>{object.precio}</div>
-                </div>
-              ))
-            }
-        </div>
-    </div>
-  );
+  render(){
+
+    // const [inventarioVar, setInventario] = useState({inventario: {ID: "", ID_categoria: "", ID_marca: "", calificacion: "", cant_ventas: "", cantidad: "", descripcion: "", imagen: "", nombre: "", precio: ""}});  
+
+    const setInventario = {}
+
+    
+
+    
+
+    return (
+      <div className="App">
+        <div className="MainContent">
+              {
+                this.state.inventario &&
+                this.state.inventario.map((object) => {
+                  <div className="postInfo">
+                    <div>{object.ID}</div>
+                    <div>{object.ID_categoria}</div>
+                    <div>{object.ID_marca}</div>
+                    <div>{object.calificacion}</div>
+                    <div>{object.cant_ventas}</div>
+                    <div>{object.cantidad}</div>
+                    <div>{object.descripcion}</div>
+                    <div>{object.imagen}</div>
+                    <div>{object.nombre}</div>
+                    <div>{object.precio}</div>
+                  </div>
+                })
+              }
+          </div>
+      </div>
+    );
+  }
+
+  
 }
 
 export default App;
